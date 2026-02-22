@@ -74,6 +74,7 @@ nav {
   display: flex; align-items: center; justify-content: center;
   text-align: center; padding: 110px 5% 70px;
   background: var(--gradient-hero); position: relative; overflow: hidden;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
 }
 .hero::before {
   content: ''; position: absolute; width: 600px; height: 600px;
@@ -651,41 +652,21 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
   <div>
     <div class="hero-badge">✦ Первое приложение - лучшие цены</div>
     <h1>Тысячи товаров -<br>заказ в <span class="gradient-text">один клик</span></h1>
-    <p>TechBex - проверенный магазин с тысячами товаров: от iPhone и MacBook до очков Ray-Ban и бытовой техники Dyson. Только оригиналы, только честные цены.</p>
+    <p>TechBex - первое приложение с динамическими ценами. Стоимость всех товаров — от iPhone до пылесосов Dyson - формируется на основе лучших актуальных прайсов. Ассортимент и наличие обновляются в режиме реального времени.</p>
     <div class="hero-buttons">
       <a href="https://t.me/techbex_bot" target="_blank" class="btn-primary">Смотреть каталог →</a>
       <a href="#features" class="btn-secondary">Узнать больше</a>
     </div>
     <div class="hero-stats">
       <div class="hero-stat"><div class="number">2 000+</div><div class="label">Товаров</div></div>
-      <div class="hero-stat"><div class="number">15 000+</div><div class="label">Клиентов</div></div>
-      <div class="hero-stat"><div class="number">4.9 ★</div><div class="label">Рейтинг</div></div>
-      <div class="hero-stat"><div class="number">5 лет</div><div class="label">На рынке</div></div>
+      <div class="hero-stat"><div class="number">15+</div><div class="label">Категорий</div></div>
+      <div class="hero-stat"><div class="number">100+</div><div class="label">Отзывов</div></div>
     </div>
   </div>
 </section>
 
-<!-- BRANDS -->
-<div class="brands">
-  <div class="brands-inner">
-    <p>Мы работаем с лучшими брендами</p>
-    <div class="brands-list">
-      <span class="brand-item">Apple</span>
-      <span class="brand-item">Samsung</span>
-      <span class="brand-item">Sony</span>
-      <span class="brand-item">Bose</span>
-      <span class="brand-item">DJI</span>
-      <span class="brand-item">Xiaomi</span>
-      <span class="brand-item">LG</span>
-      <span class="brand-item">Dyson</span>
-      <span class="brand-item">JBL</span>
-      <span class="brand-item">Ray-Ban</span>
-    </div>
-  </div>
-</div>
-
 <!-- BOT PROMO + CAROUSEL -->
-<section id="bot" class="bot-section">
+<section id="bot" class="bot-section" style="border-bottom: 1px solid var(--border);">
   <div class="bot-promo-inner">
     <div class="fade-in">
       <div class="section-tag">Каталог товаров</div>
@@ -698,14 +679,14 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
           <div class="feature-icon-wrap">⚡</div>
           <div class="feature-text">
             <h4>Актуально 24/7</h4>
-            <p>Цены и наличие обновляются автоматически - вы всегда видите реальную картину.</p>
+            <p>Цены и наличие обновляются несколько раз в день - вы всегда видите реальную картину.</p>
           </div>
         </li>
         <li class="feature-item">
-          <div class="feature-icon-wrap">🔍</div>
+          <div class="feature-icon-wrap">💡</div>
           <div class="feature-text">
-            <h4>Удобный поиск и фильтры</h4>
-            <p>Найдите нужный товар за секунды с помощью умного поиска по категориям.</p>
+            <h4>Интуитивный интерфейс</h4>
+            <p>Быстрый поиск, история заказов, предзаполнения и современная карточка товара - просто, удобно и быстро.</p>
           </div>
         </li>
         <li class="feature-item">
@@ -718,8 +699,8 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
         <li class="feature-item">
           <div class="feature-icon-wrap">🏆</div>
           <div class="feature-text">
-            <h4>Товар недели со скидкой</h4>
-            <p>Каждую неделю - специальное предложение на один из топовых товаров. Успевайте, пока не разобрали.</p>
+            <h4>Товарынедели со скидкой</h4>
+            <p>Каждую неделю - специальные предложения.</p>
           </div>
         </li>
       </ul>
@@ -778,15 +759,15 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
       <div class="features-card-small">
         <span class="small-card-icon">🚀</span>
         <div class="small-card-text">
-          <strong>Доставка за 1-3 дня</strong>
-          <span>По Москве и всей России</span>
+          <strong>Быстрая доставка</strong>
+          <span>По Москве и МО - в день заказа<br>По регионам - в среднем за 2 рабочих дня.</span>
         </div>
       </div>
       <div class="features-card-small">
         <span class="small-card-icon">🔒</span>
         <div class="small-card-text">
           <strong>Безопасная оплата</strong>
-          <span>Наличными, картой или USDT</span>
+          <span>Наличными или USDT</span>
         </div>
       </div>
     </div>
@@ -805,7 +786,7 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
           <div class="feature-icon-wrap">✅</div>
           <div class="feature-text">
             <h4>100% оригинальные товары</h4>
-            <p>Только лицензионные устройства и продукты с официальной гарантией производителя. Никаких подделок.</p>
+            <p>Только оригинальные устройства и продукты с официальной гарантией производителя. Новые и не активированные.</p>
           </div>
         </li>
         <li class="feature-item">
@@ -828,12 +809,12 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
 </section>
 
 <!-- INFO -->
-<section id="info" class="info-section">
+<section id="info" class="info-section" style="border-bottom: 1px solid var(--border);">
   <div class="info-inner">
     <div class="section-header fade-in">
       <div class="section-tag">Полезная информация</div>
       <h2 class="section-title">Всё что нужно знать</h2>
-      <p class="section-subtitle">Подробности по оплате, доставке, гарантии и возврату - прямо здесь или в нашем боте.</p>
+      <p class="section-subtitle">Подробности по оплате, доставке, гарантии и возврату.</p>
     </div>
     <div class="info-grid">
 
@@ -846,9 +827,9 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
           </div>
         </div>
         <div class="info-card-rows">
-          <div class="info-row">Самовывоз: наличными (0% комиссии) или картой (+15%).</div>
-          <div class="info-row">Доставка: наличными при получении или USDT.</div>
-          <div class="info-row">Регионы: только 100% предоплата (USDT или QR-код).</div>
+          <div class="info-row">USDT</div>
+          <div class="info-row">Наличными</div>
+          <div class="info-row">QR-код для снятия наличных</div>
         </div>
         <a href="https://t.me/techbex_bot?start=payment" target="_blank" class="info-card-link">💳 Подробнее в боте →</a>
       </div>
@@ -947,7 +928,7 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
     <div class="section-header fade-in">
       <div class="section-tag">Отзывы</div>
       <h2 class="section-title">Что говорят клиенты</h2>
-      <p class="section-subtitle">Более 15 000 довольных покупателей доверяют TechBex.</p>
+      <p class="section-subtitle">Более 100 довольных покупателей доверяют TechBex.</p>
     </div>
     <div class="testimonials-grid">
       <div class="testimonial-card fade-in fade-in-delay-1">
@@ -1005,7 +986,7 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
     <div class="footer-top">
       <div class="footer-brand">
         <a href="#" class="logo">Tech<span>Bex</span></a>
-        <p>TechBex - проверенный магазин Apple, Dyson, Ray-Ban и сотен других брендов. Только оригиналы, только честные цены.</p>
+        <p>TechBex - проверенное приложение с товарами Apple, Dyson, Ray-Ban и сотен других брендов. Только оригиналы, только низкие цены.</p>
         <div class="footer-socials">
           <!-- сюда можно вернуть иконку Telegram при желании -->
         </div>
@@ -1068,7 +1049,7 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
   const SLIDE_LABELS = [
     'Магазин - каталог товаров',
     'Карточка товара',
-    'Параметры товара выбраны',
+    'Карточка товара (заполнена)',
     'Корзина и оформление',
     'Профиль и история заказов'
   ];
