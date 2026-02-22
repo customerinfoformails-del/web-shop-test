@@ -255,17 +255,17 @@
       position: relative; flex-shrink: 0; overflow: hidden;
     }
 .slide-screenshot {
-  position: absolute;
-  top: 0;
+  position: absolute;        /* чуть вылезаем вверх */
   left: 0;
-  width: 100%;
-  height: 101%;          /* чуть выше контейнера, чтобы не было щели */
-  object-fit: contain;
-  object-position: top center;
+  width: 100%;       /* лёгкий оверзум по ширине */
+  height: 100%;      /* и по высоте, чтобы гарантированно перекрыть низ */
+  object-fit: cover; /* уже не contain, нам важнее отсутствие щели */
+  object-position: center top;
   display: block;
-  -webkit-transform: translateZ(0); /* фиксим артефакты в Safari */
+  -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
+
     .carousel-controls { display: flex; align-items: center; gap: 0.8rem; }
     .carousel-arrow {
       width: 34px; height: 34px; background: var(--card-bg);
@@ -709,36 +709,36 @@
 
     <div class="fade-in fade-in-delay-2">
       <div class="carousel-wrap">
-        <div class="carousel-phone">
-          <div class="carousel-frame">
-            <div class="carousel-track-outer">
-              <div class="carousel-track" id="carouselTrack">
-                <div class="carousel-slide">
-                  <img src="images/1.jpeg" alt="Магазин - каталог товаров" class="slide-screenshot" />
-                </div>
-                <div class="carousel-slide">
-                  <img src="images/2.jpeg" alt="Карточка товара" class="slide-screenshot" />
-                </div>
-                <div class="carousel-slide">
-                  <img src="images/3.jpeg" alt="Параметры товара выбраны" class="slide-screenshot" />
-                </div>
-                <div class="carousel-slide">
-                  <img src="images/4.jpeg" alt="Корзина и оформление" class="slide-screenshot" />
-                </div>
-                <div class="carousel-slide">
-                  <img src="images/5.jpeg" alt="Профиль и история заказов" class="slide-screenshot" />
-                </div>
-              </div>
-            </div>
+  <div class="carousel-phone">
+    <div class="carousel-frame">
+      <div class="carousel-track-outer">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-slide">
+            <img src="images/1.jpeg" alt="Магазин - каталог товаров" class="slide-screenshot" />
+          </div>
+          <div class="carousel-slide">
+            <img src="images/2.jpeg" alt="Карточка товара" class="slide-screenshot" />
+          </div>
+          <div class="carousel-slide">
+            <img src="images/3.jpeg" alt="Параметры товара выбраны" class="slide-screenshot" />
+          </div>
+          <div class="carousel-slide">
+            <img src="images/4.jpeg" alt="Корзина и оформление" class="slide-screenshot" />
+          </div>
+          <div class="carousel-slide">
+            <img src="images/5.jpeg" alt="Профиль и история заказов" class="slide-screenshot" />
           </div>
         </div>
-        <div class="carousel-controls">
-          <div class="carousel-arrow" onclick="carouselMove(-1)">←</div>
-          <div class="carousel-dots" id="carouselDots"></div>
-          <div class="carousel-arrow" onclick="carouselMove(1)">→</div>
-        </div>
-        <div class="carousel-label" id="carouselLabel">Магазин - каталог товаров</div>
       </div>
+    </div>
+  </div>
+  <div class="carousel-controls">
+    <div class="carousel-arrow" onclick="carouselMove(-1)">←</div>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="carousel-arrow" onclick="carouselMove(1)">→</div>
+  </div>
+  <div class="carousel-label" id="carouselLabel">Магазин - каталог товаров</div>
+</div>
     </div>
   </div>
 </section>
@@ -1040,7 +1040,8 @@
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-  
+
+  // ===== КАРУСЕЛЬ =====
   const SLIDE_LABELS = [
     'Магазин - каталог товаров',
     'Карточка товара',
@@ -1049,63 +1050,119 @@
     'Профиль и история заказов'
   ];
 
-  let currentSlide = 0;
-  const totalSlides = SLIDE_LABELS.length;
   const track = document.getElementById('carouselTrack');
   const dotsContainer = document.getElementById('carouselDots');
   const labelEl = document.getElementById('carouselLabel');
-  let autoplayTimer = null;
   const AUTOPLAY_INTERVAL = 3500;
 
-  function goToSlide(index) {
-    if (!track || !dotsContainer || !labelEl) return;
-    currentSlide = (index + totalSlides) % totalSlides;   // главное — модуль
-    track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
-
-    const dots = dotsContainer.querySelectorAll('.carousel-dot');
-    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
-
-    labelEl.textContent = SLIDE_LABELS[currentSlide];
-  }
-
-  function startAutoplay() {
-    stopAutoplay();
-    autoplayTimer = setInterval(() => {
-      goToSlide(currentSlide + 1);  // всегда +1, модуль завернёт 4 -> 0
-    }, AUTOPLAY_INTERVAL);
-  }
-
-  function stopAutoplay() {
-    if (autoplayTimer) {
-      clearInterval(autoplayTimer);
-      autoplayTimer = null;
-    }
-  }
-
-  function resetAutoplay() {
-    startAutoplay();
-  }
-
-  function carouselMove(dir) {
-    goToSlide(currentSlide + dir);  // dir = +1 или -1, тоже заворачиваем
-    resetAutoplay();
-  }
-  window.carouselMove = carouselMove;
+  let currentIndex = 1;           // начинаем с 1, т.к. 0 будет клон последнего
+  let totalSlides = SLIDE_LABELS.length;
+  let autoplayTimer = null;
+  let isTransitioning = false;
 
   if (track && dotsContainer && labelEl) {
+    // создаём клоны: последний в начало, первый в конец
+    const slides = Array.from(track.children);
+    const firstSlide = slides[0];
+    const lastSlide = slides[slides.length - 1];
+
+    const firstClone = firstSlide.cloneNode(true);
+    const lastClone = lastSlide.cloneNode(true);
+
+    track.insertBefore(lastClone, firstSlide);
+    track.appendChild(firstClone);
+
+    // обновляем список слайдов после вставки
+    const allSlides = Array.from(track.children);
+    const totalWithClones = allSlides.length;
+
+    // ширина каждого слайда = 100%
+    track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+
     // точки
     for (let i = 0; i < totalSlides; i++) {
       const dot = document.createElement('div');
       dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
       dot.addEventListener('click', () => {
-        goToSlide(i);       // сразу конкретный индекс, без пробега через все
+        goToRealSlide(i);
         resetAutoplay();
       });
       dotsContainer.appendChild(dot);
     }
 
-    goToSlide(0);
-    startAutoplay();
+    function updateDotsAndLabel() {
+      const dots = dotsContainer.querySelectorAll('.carousel-dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === getRealIndex()));
+      labelEl.textContent = SLIDE_LABELS[getRealIndex()];
+    }
+
+    function getRealIndex() {
+      // currentIndex: 0..totalWithClones-1, реальные слайды 1..totalSlides
+      if (currentIndex === 0) return totalSlides - 1;          // клон last
+      if (currentIndex === totalWithClones - 1) return 0;      // клон first
+      return currentIndex - 1;                                 // смещение на клон в начале
+    }
+
+    function setTransform(withTransition = true) {
+      if (withTransition) {
+        track.style.transition = 'transform 0.45s cubic-bezier(0.4,0,0.2,1)';
+      } else {
+        track.style.transition = 'none';
+      }
+      track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+    }
+
+    function goToRealSlide(realIndex) {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex = realIndex + 1; // т.к. 0 — клон last
+      setTransform(true);
+      updateDotsAndLabel();
+    }
+
+    function moveStep(direction) {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex += direction;
+      setTransform(true);
+      updateDotsAndLabel();
+    }
+
+    track.addEventListener('transitionend', () => {
+      // если ушли на клон, мгновенно перескакиваем на настоящий слайд без анимации
+      if (currentIndex === 0) {
+        currentIndex = totalSlides;          // последний реальный
+        setTransform(false);
+      } else if (currentIndex === totalWithClones - 1) {
+        currentIndex = 1;                    // первый реальный
+        setTransform(false);
+      }
+      isTransitioning = false;
+    });
+
+    function startAutoplay() {
+      stopAutoplay();
+      autoplayTimer = setInterval(() => {
+        moveStep(1);
+      }, AUTOPLAY_INTERVAL);
+    }
+
+    function stopAutoplay() {
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+
+    function resetAutoplay() {
+      startAutoplay();
+    }
+
+    function carouselMove(dir) {
+      moveStep(dir);
+      resetAutoplay();
+    }
+    window.carouselMove = carouselMove;
 
     // свайпы
     let touchStartX = 0;
@@ -1120,17 +1177,21 @@
         const diff = touchStartX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 40) {
           if (diff > 0) {
-            // свайп влево => следующий
-            goToSlide(currentSlide + 1);  // 4 -> 0
+            moveStep(1);
           } else {
-            // свайп вправо => предыдущий
-            goToSlide(currentSlide - 1);  // 0 -> 4
+            moveStep(-1);
           }
         }
         resetAutoplay();
       }, { passive: true });
     }
+
+    // начальное состояние
+    updateDotsAndLabel();
+    startAutoplay();
   }
 </script>
+</body>
+</html>
 </body>
 </html>
