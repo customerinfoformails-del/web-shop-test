@@ -69,12 +69,19 @@ nav {
 }
 
 /* ===== HERO ===== */
+/* ===== HERO ===== */
 .hero {
-  min-height: 100vh;
-  display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 110px 5% 70px;
-  background: var(--gradient-hero); position: relative; overflow: hidden;
-  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  /* min-height: 100vh;  ← УДАЛИТЬ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 5% 60px; /* было 110 / 70, это как раз -10px сверху/снизу */
+  background: var(--gradient-hero);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 .hero::before {
   content: ''; position: absolute; width: 600px; height: 600px;
@@ -564,7 +571,17 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
   .nav-cta { display: none; }
 
   section { padding: 75px 4%; }
-  .hero { padding-top: 110px; padding: 95px 4% 55px; min-height: calc(100vh - 60px);}
+  .hero {
+    padding: 95px 4% 55px;
+    min-height: 100vh;
+  }
+
+  /* современные браузеры / iOS 15.4+ */
+  @supports (height: 100dvh) {
+    .hero {
+      min-height: 100dvh;
+    }
+  }
 
   .hero-badge { font-size: 0.7rem; padding: 0.22rem 0.7rem; }
   .hero h1 {
@@ -598,7 +615,7 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
 }
 
 @media (max-width: 480px) {
-  .hero { padding-top: 100px; padding-bottom: 50px; min-height: 100vh}
+  .hero { padding-top: 90px; padding-bottom: 50px; }
   .hero h1 { font-size: 2.3rem; }
   .hero-buttons { margin-bottom: 2.3rem; }
   .carousel-phone { max-width: 260px; }
