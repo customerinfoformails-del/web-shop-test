@@ -254,13 +254,18 @@
       min-width: 100%; height: 100%;
       position: relative; flex-shrink: 0; overflow: hidden;
     }
-    .slide-screenshot {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: contain;
-      object-position: top center;
-      display: block;
-    }
+.slide-screenshot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 101%;          /* чуть выше контейнера, чтобы не было щели */
+  object-fit: contain;
+  object-position: top center;
+  display: block;
+  -webkit-transform: translateZ(0); /* фиксим артефакты в Safari */
+  transform: translateZ(0);
+}
     .carousel-controls { display: flex; align-items: center; gap: 0.8rem; }
     .carousel-arrow {
       width: 34px; height: 34px; background: var(--card-bg);
@@ -1035,7 +1040,7 @@
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
+  
   const SLIDE_LABELS = [
     'Магазин - каталог товаров',
     'Карточка товара',
@@ -1054,17 +1059,19 @@
 
   function goToSlide(index) {
     if (!track || !dotsContainer || !labelEl) return;
-    currentSlide = (index + totalSlides) % totalSlides;
+    currentSlide = (index + totalSlides) % totalSlides;   // главное — модуль
     track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+
     const dots = dotsContainer.querySelectorAll('.carousel-dot');
     dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+
     labelEl.textContent = SLIDE_LABELS[currentSlide];
   }
 
   function startAutoplay() {
     stopAutoplay();
     autoplayTimer = setInterval(() => {
-      goToSlide(currentSlide + 1);
+      goToSlide(currentSlide + 1);  // всегда +1, модуль завернёт 4 -> 0
     }, AUTOPLAY_INTERVAL);
   }
 
@@ -1080,17 +1087,18 @@
   }
 
   function carouselMove(dir) {
-    goToSlide(currentSlide + dir);
+    goToSlide(currentSlide + dir);  // dir = +1 или -1, тоже заворачиваем
     resetAutoplay();
   }
   window.carouselMove = carouselMove;
 
   if (track && dotsContainer && labelEl) {
+    // точки
     for (let i = 0; i < totalSlides; i++) {
       const dot = document.createElement('div');
       dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
       dot.addEventListener('click', () => {
-        goToSlide(i);
+        goToSlide(i);       // сразу конкретный индекс, без пробега через все
         resetAutoplay();
       });
       dotsContainer.appendChild(dot);
@@ -1099,6 +1107,7 @@
     goToSlide(0);
     startAutoplay();
 
+    // свайпы
     let touchStartX = 0;
     const frame = document.querySelector('.carousel-frame');
     if (frame) {
@@ -1106,13 +1115,16 @@
         touchStartX = e.touches[0].clientX;
         stopAutoplay();
       }, { passive: true });
+
       frame.addEventListener('touchend', function(e) {
         const diff = touchStartX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 40) {
           if (diff > 0) {
-            goToSlide(currentSlide + 1);
+            // свайп влево => следующий
+            goToSlide(currentSlide + 1);  // 4 -> 0
           } else {
-            goToSlide(currentSlide - 1);
+            // свайп вправо => предыдущий
+            goToSlide(currentSlide - 1);  // 0 -> 4
           }
         }
         resetAutoplay();
