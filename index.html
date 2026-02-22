@@ -70,7 +70,7 @@ nav {
 
 /* ===== HERO ===== */
 .hero {
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   display: flex; align-items: center; justify-content: center;
   text-align: center; padding: 110px 5% 70px;
   background: var(--gradient-hero); position: relative; overflow: hidden;
@@ -598,7 +598,7 @@ section#reviews { padding-top: 75px; padding-bottom: 45px; }
 }
 
 @media (max-width: 480px) {
-  .hero { padding-top: 90px; padding-bottom: 50px; }
+  .hero { padding-top: 110px; padding-bottom: 50px; }
   .hero h1 { font-size: 2.5rem; }
   .hero-buttons { margin-bottom: 2.3rem; }
   .carousel-phone { max-width: 260px; }
