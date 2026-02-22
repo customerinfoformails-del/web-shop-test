@@ -250,16 +250,22 @@
       display: flex; width: 100%; height: 100%;
       transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
     }
-    .carousel-slide {
-      min-width: 100%; height: 100%;
-      position: relative; flex-shrink: 0; overflow: hidden;
-    }
+.carousel-slide {
+  position: relative;
+  overflow: hidden; /* важно, чтобы всё лишнее резалось по рамке телефона */
+}
+
+/* базовый стиль */
 .slide-screenshot {
-  position: absolute;        /* чуть вылезаем вверх */
-  left: 0;
-  width: 100%;       /* лёгкий оверзум по ширине */
-  height: 100%;      /* и по высоте, чтобы гарантированно перекрыть низ */
-  object-fit: cover; /* уже не contain, нам важнее отсутствие щели */
+  position: absolute;
+  inset: 0;            /* top:0; right:0; bottom:0; left:0; */
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
   object-position: center top;
   display: block;
   -webkit-transform: translateZ(0);
